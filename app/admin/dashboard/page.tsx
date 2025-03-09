@@ -24,29 +24,51 @@ export default function DashboardPage() {
   const [error, setError] = useState('');
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [filter, setFilter] = useState<'ALL' | ReservationStatus>('ALL');
+  const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
   const router = useRouter();
-
-  useEffect(() => {
-    fetchReservations();
-  }, []);
 
   const fetchReservations = async () => {
     try {
-      const response = await fetch('/api/admin/reservations');
+      console.log('Fetching reservations...');
+      setLoading(true);
+      const response = await fetch('/api/admin/reservations', {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache'
+        }
+      });
+      
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || 'Failed to fetch reservations');
       }
+      
       const data = await response.json();
+      console.log('Fetched reservations:', data);
       setReservations(data);
       setError('');
+      setLastRefresh(new Date());
     } catch (err) {
+      console.error('Error fetching reservations:', err);
       setError('Failed to load reservations');
-      console.error(err);
     } finally {
       setLoading(false);
     }
   };
+
+  // Initial fetch
+  useEffect(() => {
+    fetchReservations();
+  }, []);
+
+  // Auto-refresh every 30 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchReservations();
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const updateReservationStatus = async (id: string, status: ReservationStatus, adminNote?: string) => {
     try {
@@ -100,11 +122,13 @@ export default function DashboardPage() {
     ? reservations 
     : reservations.filter(r => r.status === filter);
 
-  if (loading) return (
-    <div className="flex justify-center items-center min-h-screen">
-      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#C08261]"></div>
-    </div>
-  );
+  if (loading && reservations.length === 0) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#C08261]"></div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -122,11 +146,18 @@ export default function DashboardPage() {
                       : 'bg-white text-[#C08261] border border-[#C08261] hover:bg-[#F7E6D3]'
                   }`}
                 >
-                  {status}
+                  {status} {status === filter && `(${filteredReservations.length})`}
                 </button>
               ))}
             </div>
             <div className="flex items-center gap-4">
+              <button
+                onClick={fetchReservations}
+                className="px-4 py-2 bg-[#C08261] text-white rounded-md hover:bg-[#B4724F] transition-colors duration-200"
+                disabled={loading}
+              >
+                {loading ? 'Refreshing...' : 'Refresh'}
+              </button>
               <button
                 onClick={async () => {
                   await fetch('/api/admin/logout', { method: 'POST' });
@@ -142,6 +173,9 @@ export default function DashboardPage() {
                 className="h-12 w-auto"
               />
             </div>
+          </div>
+          <div className="mt-2 text-sm text-gray-600">
+            Last refreshed: {lastRefresh.toLocaleTimeString()}
           </div>
         </div>
       </div>
