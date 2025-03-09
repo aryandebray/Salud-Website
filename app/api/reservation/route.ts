@@ -16,6 +16,15 @@ export async function POST(request: Request) {
       specialRequests
     } = await request.json();
 
+    console.log('Attempting to create reservation:', {
+      name,
+      email,
+      date,
+      time,
+      guests,
+      specialRequests
+    });
+
     // Create email transporter
     const transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -38,6 +47,8 @@ export async function POST(request: Request) {
         status: 'PENDING'
       }
     });
+
+    console.log('Reservation created successfully:', reservation);
 
     // Format date for better readability
     const formattedDate = new Date(date).toLocaleDateString('en-US', {
