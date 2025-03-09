@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
+// API route for handling individual reservation operations
 export async function PATCH(
   request: Request,
   { params }: { params: { id: string } }
