@@ -1,20 +1,23 @@
 # Salud Restaurant Website
 
-A modern, elegant website for Salud Italian Restaurant built with Next.js, TypeScript, and Tailwind CSS.
+A modern, responsive website for Salud Italian Restaurant built with Next.js and TailwindCSS.
 
 ## Features
 
-- Responsive design
-- Modern UI with animations
-- Online reservation system
+- Modern, responsive design
+- Online reservation system with email notifications
+- Interactive menu with categories
 - Photo gallery
-- Contact information
-- Restaurant menu (coming soon)
+- Contact information and location
+- Mobile-friendly navigation
 
-## Prerequisites
+## Tech Stack
 
-- Node.js 18.x or later
-- npm or yarn
+- Next.js 14
+- TailwindCSS
+- TypeScript
+- Framer Motion
+- Nodemailer
 
 ## Getting Started
 
@@ -22,23 +25,23 @@ A modern, elegant website for Salud Italian Restaurant built with Next.js, TypeS
 2. Install dependencies:
    ```bash
    npm install
-   # or
-   yarn install
    ```
-
-3. Create a `.env.local` file in the root directory and add your environment variables:
-   ```
-   NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_api_key_here
-   ```
-
+3. Create `.env.local` file with required environment variables
 4. Run the development server:
    ```bash
    npm run dev
-   # or
-   yarn dev
    ```
 
-5. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Environment Variables
+
+Required environment variables:
+- `EMAIL_USER`: Gmail address for sending notifications
+- `EMAIL_PASS`: Gmail app password
+- `EMAIL_RECIPIENT`: Email address to receive notifications
+
+## Deployment
+
+The website is deployed on Vercel with automatic deployments from the main branch.
 
 ## Project Structure
 
@@ -75,4 +78,4 @@ salud/
 - [TypeScript](https://www.typescriptlang.org/)
 - [Tailwind CSS](https://tailwindcss.com/)
 - [Framer Motion](https://www.framer.com/motion/)
-- [Hero Icons](https://heroicons.com/) 
+- [Hero Icons](https://heroicons.com/)
