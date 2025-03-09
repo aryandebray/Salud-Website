@@ -161,13 +161,13 @@ export default function Menu() {
 
         {/* Menu Content */}
         <div className="grid md:grid-cols-2 gap-8 items-start">
-          {/* Menu Image */}
+          {/* Menu Image - Hidden on mobile, shown on desktop */}
           <motion.div
             key={`${activeSection}-image`}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
-            className="relative h-[600px] sticky top-24"
+            className="relative h-[300px] md:h-[600px] hidden md:block md:sticky md:top-24"
           >
             <Image
               src={menuSections[activeSection].image}
@@ -183,13 +183,35 @@ export default function Menu() {
             </h3>
           </motion.div>
 
+          {/* Mobile Image - Shown only on mobile */}
+          <motion.div
+            key={`${activeSection}-image-mobile`}
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="relative h-[200px] mb-6 md:hidden"
+          >
+            <Image
+              src={menuSections[activeSection].image}
+              alt={menuSections[activeSection].title}
+              fill
+              className="object-cover rounded-lg shadow-xl"
+              sizes="100vw"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent rounded-lg" />
+            <h3 className="absolute bottom-6 left-6 text-2xl font-serif text-white">
+              {menuSections[activeSection].title}
+            </h3>
+          </motion.div>
+
           {/* Menu Items */}
           <motion.div
             key={activeSection}
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
-            className="grid gap-6"
+            className="grid gap-6 md:col-start-2"
           >
             {menuSections[activeSection].items.map((item, index) => (
               <motion.div
