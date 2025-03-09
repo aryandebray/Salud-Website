@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import fs from 'fs';
 import path from 'path';
+import { prisma } from '@/lib/prisma';
 
 export async function POST(request: Request) {
   try {
@@ -24,6 +25,20 @@ export async function POST(request: Request) {
       },
     });
 
+    // Save reservation to database
+    const reservation = await prisma.reservation.create({
+      data: {
+        name,
+        email,
+        phone,
+        date: new Date(date),
+        time,
+        guests: parseInt(guests),
+        specialRequests,
+        status: 'PENDING'
+      }
+    });
+
     // Format date for better readability
     const formattedDate = new Date(date).toLocaleDateString('en-US', {
       weekday: 'long',
@@ -44,7 +59,7 @@ export async function POST(request: Request) {
         <head>
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Reservation Confirmation</title>
+          <title>Reservation Request Received</title>
           <style>
             body {
               font-family: Arial, sans-serif;
@@ -115,9 +130,9 @@ export async function POST(request: Request) {
               <div class="logo-fallback" style="display: none;">Salud Restaurant</div>
             </div>
             <div class="content">
-              <h1 style="color: #0B4D2C; text-align: center;">Reservation Confirmation</h1>
+              <h1 style="color: #0B4D2C; text-align: center;">Reservation Request Received</h1>
               <p>Dear ${name},</p>
-              <p>Thank you for choosing Salud Restaurant. We are pleased to confirm your reservation:</p>
+              <p>Thank you for choosing Salud Restaurant. We have received your reservation request and our team will review it shortly.</p>
               
               <div class="reservation-details">
                 <h2 style="color: #0B4D2C; margin-top: 0;">Reservation Details</h2>
@@ -128,20 +143,12 @@ export async function POST(request: Request) {
                 ${specialRequests ? `<p><strong>Special Requests:</strong> ${specialRequests}</p>` : ''}
               </div>
 
-              <div style="text-align: center;">
-                <a href="${process.env.NEXT_PUBLIC_BASE_URL}/menu" class="button">View Our Menu</a>
-              </div>
-
               <div class="divider"></div>
 
-              <h3 style="color: #0B4D2C;">Important Information</h3>
-              <ul>
-                <li>Please arrive 5-10 minutes before your reservation time</li>
-                <li>Your table will be held for 15 minutes after the reservation time</li>
-                <li>For parties larger than 6, a deposit may be required</li>
-              </ul>
+              <h3 style="color: #0B4D2C;">What's Next?</h3>
+              <p>Our team will review your reservation request and send you a confirmation email within the next few hours. Please note that your reservation is not confirmed until you receive our confirmation email.</p>
 
-              <p>If you need to modify or cancel your reservation, please contact us at:</p>
+              <p>If you need to modify or cancel your reservation request, please contact us at:</p>
               <p>📞 Phone: +1 (555) 123-4567<br>
                  ✉️ Email: reservations@salud.com</p>
             </div>
@@ -149,7 +156,7 @@ export async function POST(request: Request) {
             <div class="footer">
               <p>Salud Restaurant<br>
               123 Italian Street, Foodville, FD 12345</p>
-              <p>This is an automated confirmation. Please do not reply to this email.</p>
+              <p>This is an automated message. Please do not reply to this email.</p>
             </div>
           </div>
         </body>
@@ -163,7 +170,7 @@ export async function POST(request: Request) {
         <head>
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>New Reservation</title>
+          <title>New Reservation Request</title>
           <style>
             body {
               font-family: Arial, sans-serif;
@@ -228,6 +235,11 @@ export async function POST(request: Request) {
                 <p><strong>Number of Guests:</strong> ${guests}</p>
                 ${specialRequests ? `<p><strong>Special Requests:</strong> ${specialRequests}</p>` : ''}
               </div>
+
+              <div style="margin-top: 20px;">
+                <p>To manage this reservation, please visit the admin dashboard:</p>
+                <p><a href="${process.env.NEXT_PUBLIC_BASE_URL}/admin/reservations" style="color: #0B4D2C;">View in Dashboard</a></p>
+              </div>
             </div>
           </div>
         </body>
@@ -238,7 +250,7 @@ export async function POST(request: Request) {
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: email,
-      subject: 'Reservation Confirmation - Salud Restaurant',
+      subject: 'Reservation Request Received - Salud Restaurant',
       html: customerEmailTemplate
     });
 
@@ -251,7 +263,7 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json(
-      { message: 'Reservation submitted successfully!' },
+      { message: 'Reservation request submitted successfully! We will send you a confirmation email shortly.' },
       { status: 200 }
     );
   } catch (error) {
