@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
+import fs from 'fs';
+import path from 'path';
 
 export async function POST(request: Request) {
   try {
@@ -30,8 +32,10 @@ export async function POST(request: Request) {
       day: 'numeric'
     });
 
-    // Base URL for assets (update this with your actual deployed URL)
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://salud-website.vercel.app';
+    // Read and convert logo to base64
+    const logoPath = path.join(process.cwd(), 'public', 'logo.png');
+    const logoBase64 = fs.readFileSync(logoPath, { encoding: 'base64' });
+    const logoDataUrl = `data:image/png;base64,${logoBase64}`;
 
     // HTML email template for customer
     const customerEmailTemplate = `
@@ -62,6 +66,13 @@ export async function POST(request: Request) {
             .logo {
               max-width: 200px;
               height: auto;
+              display: inline-block;
+            }
+            .logo-fallback {
+              color: white;
+              font-size: 24px;
+              font-weight: bold;
+              font-family: serif;
             }
             .content {
               background-color: #ffffff;
@@ -100,7 +111,8 @@ export async function POST(request: Request) {
         <body>
           <div class="email-container">
             <div class="header">
-              <img src="${baseUrl}/logo.png" alt="Salud Restaurant" class="logo">
+              <img src="${logoDataUrl}" alt="Salud Restaurant" class="logo" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+              <div class="logo-fallback" style="display: none;">Salud Restaurant</div>
             </div>
             <div class="content">
               <h1 style="color: #0B4D2C; text-align: center;">Reservation Confirmation</h1>
@@ -117,7 +129,7 @@ export async function POST(request: Request) {
               </div>
 
               <div style="text-align: center;">
-                <a href="${baseUrl}/menu" class="button">View Our Menu</a>
+                <a href="${process.env.NEXT_PUBLIC_BASE_URL}/menu" class="button">View Our Menu</a>
               </div>
 
               <div class="divider"></div>
@@ -170,6 +182,17 @@ export async function POST(request: Request) {
               padding: 20px;
               text-align: center;
             }
+            .logo {
+              max-width: 200px;
+              height: auto;
+              display: inline-block;
+            }
+            .logo-fallback {
+              color: white;
+              font-size: 24px;
+              font-weight: bold;
+              font-family: serif;
+            }
             .content {
               background-color: #ffffff;
               padding: 30px;
@@ -187,7 +210,8 @@ export async function POST(request: Request) {
         <body>
           <div class="email-container">
             <div class="header">
-              <img src="${baseUrl}/logo.png" alt="Salud Restaurant" class="logo">
+              <img src="${logoDataUrl}" alt="Salud Restaurant" class="logo" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+              <div class="logo-fallback" style="display: none;">Salud Restaurant</div>
             </div>
             <div class="content">
               <h1 style="color: #0B4D2C;">New Reservation Request</h1>
