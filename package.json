@@ -1,12 +1,13 @@
 {
-  "name": "salud-restaurant",
+  "name": "salud",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
+    "postinstall": "prisma generate",
     "seed": "npx ts-node prisma/seed.ts"
   },
   "prisma": {
