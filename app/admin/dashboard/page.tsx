@@ -18,6 +18,9 @@ interface Reservation {
   adminNote?: string;
 }
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default function DashboardPage() {
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [loading, setLoading] = useState(true);
@@ -31,10 +34,13 @@ export default function DashboardPage() {
     try {
       console.log('Fetching reservations...');
       setLoading(true);
-      const response = await fetch('/api/admin/reservations', {
+      const timestamp = new Date().getTime();
+      const response = await fetch(`/api/admin/reservations?t=${timestamp}`, {
         cache: 'no-store',
         headers: {
-          'Cache-Control': 'no-cache'
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0'
         }
       });
       
@@ -61,11 +67,11 @@ export default function DashboardPage() {
     fetchReservations();
   }, []);
 
-  // Auto-refresh every 30 seconds
+  // Auto-refresh every 15 seconds instead of 30
   useEffect(() => {
     const interval = setInterval(() => {
       fetchReservations();
-    }, 30000);
+    }, 15000); // Changed to 15 seconds for more frequent updates
 
     return () => clearInterval(interval);
   }, []);

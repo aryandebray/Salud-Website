@@ -4,6 +4,9 @@ import fs from 'fs';
 import path from 'path';
 import { prisma } from '@/lib/prisma';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function POST(request: Request) {
   try {
     const {
@@ -16,7 +19,7 @@ export async function POST(request: Request) {
       specialRequests
     } = await request.json();
 
-    console.log('Attempting to create reservation:', {
+    console.log('Creating new reservation:', {
       name,
       email,
       date,
