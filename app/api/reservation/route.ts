@@ -62,7 +62,8 @@ export async function POST(request: Request) {
 
     // Read and convert logo to base64
     const logoPath = path.join(process.cwd(), 'public', 'logobg.png');
-    const logoBase64 = fs.readFileSync(logoPath, { encoding: 'base64' });
+    const logoBuffer = fs.readFileSync(logoPath);
+    const logoBase64 = logoBuffer.toString('base64');
     const logoDataUrl = `data:image/png;base64,${logoBase64}`;
 
     // HTML email template for customer
@@ -269,7 +270,11 @@ export async function POST(request: Request) {
         to: email,
         subject: 'Reservation Request Received - Salud Restaurant',
         html: customerEmailTemplate,
-        attachDataUrls: true // Enable data URL images
+        attachments: [{
+          filename: 'logobg.png',
+          content: logoBase64,
+          cid: 'logo'
+        }]
       });
 
       // Send notification email to restaurant
@@ -278,7 +283,11 @@ export async function POST(request: Request) {
         to: process.env.EMAIL_RECIPIENT || process.env.EMAIL_USER,
         subject: `New Reservation Request from ${name}`,
         html: restaurantEmailTemplate,
-        attachDataUrls: true // Enable data URL images
+        attachments: [{
+          filename: 'logobg.png',
+          content: logoBase64,
+          cid: 'logo'
+        }]
       });
 
       console.log('Emails sent successfully');
