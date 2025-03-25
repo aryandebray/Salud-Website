@@ -225,9 +225,6 @@ export async function PATCH(
               <li>Email us at salud.calcutta@gmail.com</li>
             </ul>
 
-            <div style="text-align: center;">
-              <a href="https://salud-calcutta.vercel.app/#reservation" class="button">Make New Reservation</a>
-            </div>
           ${footerTemplate}
         `;
       }
