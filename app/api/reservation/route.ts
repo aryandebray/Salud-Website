@@ -33,7 +33,7 @@ export async function POST(request: Request) {
       service: 'gmail',
       auth: {
         user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_APP_PASSWORD,
+        pass: process.env.EMAIL_PASS,
       },
     });
 
@@ -46,7 +46,6 @@ export async function POST(request: Request) {
         time,
         guests: parseInt(guests),
         phone: body.phone, // Use the phone number from the form
-        status: 'PENDING', // Set default status
       },
     });
 
@@ -61,9 +60,8 @@ export async function POST(request: Request) {
     });
 
     // Read and convert logo to base64
-    const logoPath = path.join(process.cwd(), 'public', 'logobg.png');
-    const logoBuffer = fs.readFileSync(logoPath);
-    const logoBase64 = logoBuffer.toString('base64');
+    const logoPath = path.join(process.cwd(), 'public', 'logo.png');
+    const logoBase64 = fs.readFileSync(logoPath, { encoding: 'base64' });
     const logoDataUrl = `data:image/png;base64,${logoBase64}`;
 
     // HTML email template for customer
@@ -165,14 +163,15 @@ export async function POST(request: Request) {
               <p>Our team will review your reservation request and send you a confirmation email within the next few hours. Please note that your reservation is not confirmed until you receive our confirmation email.</p>
 
               <p>If you need to modify or cancel your reservation request, please contact us at:</p>
-              <p>📞 Phone: +9831175550<br>
+              <p>📞 Phone: +91 9831175550<br>
                  ✉️ Email: salud.calcutta@gmail.com</p>
             </div>
             
             <div class="footer">
               <p>Salud Restaurant<br>
-              G962+F6R, Lake Range, Kalighat, Kolkata, West Bengal 700045
-              </p>
+              123 Italian Street, Foodville, FD 12345</p>
+              <p>📞 Phone: +91 9831175550<br>
+                 ✉️ Email: salud.calcutta@gmail.com</p>
               <p>This is an automated message. Please do not reply to this email.</p>
             </div>
           </div>
@@ -229,6 +228,12 @@ export async function POST(request: Request) {
               border-radius: 8px;
               margin: 20px 0;
             }
+            .footer {
+              text-align: center;
+              padding: 20px;
+              color: #666;
+              font-size: 14px;
+            }
           </style>
         </head>
         <body>
@@ -248,6 +253,7 @@ export async function POST(request: Request) {
                 <h2 style="color: #0B4D2C; margin-top: 0;">Customer Details</h2>
                 <p><strong>Name:</strong> ${name}</p>
                 <p><strong>Email:</strong> ${email}</p>
+                <p><strong>Phone:</strong> ${body.phone || 'Not provided'}</p>
                 <p><strong>Date:</strong> ${formattedDate}</p>
                 <p><strong>Time:</strong> ${time}</p>
                 <p><strong>Number of Guests:</strong> ${guests}</p>
@@ -258,49 +264,37 @@ export async function POST(request: Request) {
                 <p><a href="/admin/reservations" style="color: #0B4D2C;">View in Dashboard</a></p>
               </div>
             </div>
+            <div class="footer">
+              <p>Salud Restaurant<br>
+              123 Italian Street, Foodville, FD 12345</p>
+              <p>📞 Phone: +91 9831175550<br>
+                 ✉️ Email: salud.calcutta@gmail.com</p>
+              <p>This is an automated message. Please do not reply to this email.</p>
+            </div>
           </div>
         </body>
       </html>
     `;
 
-    try {
-      // Send confirmation email to customer
-      await transporter.sendMail({
-        from: process.env.EMAIL_USER,
-        to: email,
-        subject: 'Reservation Request Received - Salud Restaurant',
-        html: customerEmailTemplate,
-        attachments: [{
-          filename: 'logobg.png',
-          content: logoBase64,
-          cid: 'logo'
-        }]
-      });
-
-      // Send notification email to restaurant
-      await transporter.sendMail({
-        from: process.env.EMAIL_USER,
-        to: process.env.EMAIL_RECIPIENT || process.env.EMAIL_USER,
-        subject: `New Reservation Request from ${name}`,
-        html: restaurantEmailTemplate,
-        attachments: [{
-          filename: 'logobg.png',
-          content: logoBase64,
-          cid: 'logo'
-        }]
-      });
-
-      console.log('Emails sent successfully');
-    } catch (emailError) {
-      console.error('Failed to send emails:', emailError);
-      // Continue with the response even if email fails
-    }
-
-    return NextResponse.json({
-      success: true,
-      message: 'Reservation request received! Please check your email for confirmation.',
-      data: reservation
+    // Send confirmation email to customer
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: 'Reservation Request Received - Salud Restaurant',
+      html: customerEmailTemplate,
+      attachDataUrls: true // Enable data URL images
     });
+
+    // Send notification email to restaurant
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: process.env.EMAIL_RECIPIENT || process.env.EMAIL_USER,
+      subject: `New Reservation Request from ${name}`,
+      html: restaurantEmailTemplate,
+      attachDataUrls: true // Enable data URL images
+    });
+
+    return NextResponse.json(reservation);
   } catch (error) {
     console.error('Failed to process reservation:', error);
     return NextResponse.json(

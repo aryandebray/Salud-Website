@@ -25,7 +25,7 @@ export async function PATCH(
       service: 'gmail',
       auth: {
         user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_APP_PASSWORD,
+        pass: process.env.EMAIL_PASS,
       },
     });
 
@@ -38,7 +38,7 @@ export async function PATCH(
     });
 
     // Read and convert logo to base64
-    const logoPath = path.join(process.cwd(), 'public', 'logobg.png');
+    const logoPath = path.join(process.cwd(), 'public', 'logo.png');
     const logoBuffer = fs.readFileSync(logoPath);
     const logoBase64 = logoBuffer.toString('base64');
 
@@ -153,7 +153,9 @@ export async function PATCH(
       const footerTemplate = `
               <div class="footer">
                 <p>Salud Restaurant<br>
-                G962+F6R, Lake Range, Kalighat, Kolkata, West Bengal 700045</p>
+                123 Italian Street, Foodville, FD 12345</p>
+                <p>📞 Phone: +91 9831175550<br>
+                   ✉️ Email: salud.calcutta@gmail.com</p>
                 <p>This is an automated message. Please do not reply to this email.</p>
               </div>
             </div>
@@ -200,7 +202,7 @@ export async function PATCH(
             </div>
 
             <p>If you need to modify or cancel your reservation, please contact us at:</p>
-            <p>📞 Phone:+91 9831175550<br>
+            <p>📞 Phone: +91 9831175550<br>
                ✉️ Email: salud.calcutta@gmail.com</p>
           ${footerTemplate}
         `;
@@ -243,7 +245,7 @@ export async function PATCH(
       html: getEmailTemplate(),
       attachments: [
         {
-          filename: 'logobg.png',
+          filename: 'logo.png',
           content: logoBuffer,
           cid: 'logo'
         },
