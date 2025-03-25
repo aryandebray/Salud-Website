@@ -165,6 +165,12 @@ export default function DashboardPage() {
                 {loading ? 'Refreshing...' : 'Refresh'}
               </button>
               <button
+                onClick={() => router.push('/admin/menu')}
+                className="px-4 py-2 bg-[#C08261] text-white rounded-md hover:bg-[#B4724F] transition-colors duration-200"
+              >
+                Manage Menu
+              </button>
+              <button
                 onClick={async () => {
                   await fetch('/api/admin/logout', { method: 'POST' });
                   window.location.href = '/admin/login';

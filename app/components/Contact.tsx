@@ -7,22 +7,22 @@ export default function Contact() {
     {
       icon: MapPinIcon,
       title: 'Address',
-      content: '123 Italian Street, Foodville, FD 12345'
+      content: 'G962+F6R, Lake Range, Kalighat, Kolkata, West Bengal 700045'
     },
     {
       icon: PhoneIcon,
       title: 'Phone',
-      content: '+1 (555) 123-4567'
+      content: '+91 9831175550'
     },
     {
       icon: EnvelopeIcon,
       title: 'Email',
-      content: 'reservations@salud.com'
+      content: 'salud.calcutta@gmail.com'
     },
     {
       icon: ClockIcon,
       title: 'Hours',
-      content: 'Mon-Sun: 11:00 AM - 10:00 PM'
+      content: 'Fri-Sun: 7:00 PM - 10:00 PM'
     }
   ];
 

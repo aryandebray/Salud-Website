@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 export default function ReservationForm() {
@@ -9,17 +9,35 @@ export default function ReservationForm() {
     email: '',
     phone: '',
     date: '',
-    time: '',
-    guests: '2',
+    guests: '1',
     specialRequests: ''
   });
 
+  const [availableDates, setAvailableDates] = useState<string[]>([]);
   const [status, setStatus] = useState({
     type: '',
     message: ''
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    // Generate available dates for the next 3 months
+    const dates: string[] = [];
+    const today = new Date();
+    const threeMonthsFromNow = new Date();
+    threeMonthsFromNow.setMonth(today.getMonth() + 3);
+
+    let currentDate = new Date(today);
+    while (currentDate <= threeMonthsFromNow) {
+      const day = currentDate.getDay();
+      if (day === 5 || day === 6 || day === 0) { // Friday, Saturday, Sunday
+        dates.push(currentDate.toISOString().split('T')[0]);
+      }
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+    setAvailableDates(dates);
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -40,7 +58,10 @@ export default function ReservationForm() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          time: '19:00' // Default time set to 7:00 PM
+        }),
       });
 
       const data = await response.json();
@@ -52,8 +73,7 @@ export default function ReservationForm() {
           email: '',
           phone: '',
           date: '',
-          time: '',
-          guests: '2',
+          guests: '1',
           specialRequests: ''
         });
       } else {
@@ -69,15 +89,6 @@ export default function ReservationForm() {
     }
   };
 
-  // Generate time slots from 11 AM to 10 PM
-  const timeSlots = Array.from({ length: 24 }, (_, i) => {
-    const hour = Math.floor(i / 2) + 11;
-    const minute = i % 2 === 0 ? '00' : '30';
-    const ampm = hour >= 12 ? 'PM' : 'AM';
-    const hour12 = hour > 12 ? hour - 12 : hour;
-    return `${hour12}:${minute} ${ampm}`;
-  });
-
   return (
     <section id="reservation" className="section-padding bg-primary">
       <div className="container-custom">
@@ -90,7 +101,7 @@ export default function ReservationForm() {
         >
           <h2 className="font-serif text-4xl md:text-5xl mb-4">Make a Reservation</h2>
           <p className="text-lg text-gray-200">
-            Book your table at Salud and experience authentic Italian cuisine
+            Book your table at Salud and experience authentic Thai cuisine
           </p>
         </motion.div>
 
@@ -115,8 +126,8 @@ export default function ReservationForm() {
           )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label htmlFor="name" className="block text-gray-700 mb-2">
+            <div className="form-group">
+              <label htmlFor="name" className="block text-gray-700 mb-2 font-medium">
                 Name
               </label>
               <input
@@ -126,13 +137,13 @@ export default function ReservationForm() {
                 value={formData.name}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 placeholder="Your name"
               />
             </div>
 
-            <div>
-              <label htmlFor="email" className="block text-gray-700 mb-2">
+            <div className="form-group">
+              <label htmlFor="email" className="block text-gray-700 mb-2 font-medium">
                 Email
               </label>
               <input
@@ -142,13 +153,13 @@ export default function ReservationForm() {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 placeholder="your@email.com"
               />
             </div>
 
-            <div>
-              <label htmlFor="phone" className="block text-gray-700 mb-2">
+            <div className="form-group">
+              <label htmlFor="phone" className="block text-gray-700 mb-2 font-medium">
                 Phone
               </label>
               <input
@@ -158,13 +169,13 @@ export default function ReservationForm() {
                 value={formData.phone}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 placeholder="Your phone number"
               />
             </div>
 
-            <div>
-              <label htmlFor="guests" className="block text-gray-700 mb-2">
+            <div className="form-group">
+              <label htmlFor="guests" className="block text-gray-700 mb-2 font-medium">
                 Number of Guests
               </label>
               <select
@@ -173,9 +184,9 @@ export default function ReservationForm() {
                 value={formData.guests}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
               >
-                {Array.from({ length: 19 }, (_, i) => i + 2).map(num => (
+                {Array.from({ length: 10 }, (_, i) => i + 1).map(num => (
                   <option key={num} value={num}>
                     {num} {num === 1 ? 'Guest' : 'Guests'}
                   </option>
@@ -183,46 +194,39 @@ export default function ReservationForm() {
               </select>
             </div>
 
-            <div>
-              <label htmlFor="date" className="block text-gray-700 mb-2">
-                Date
+            <div className="form-group">
+              <label htmlFor="date" className="block text-gray-700 mb-2 font-medium">
+                Date (Weekends Only)
               </label>
-              <input
-                type="date"
+              <select
                 id="date"
                 name="date"
                 value={formData.date}
                 onChange={handleChange}
                 required
-                min={new Date().toISOString().split('T')[0]}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="time" className="block text-gray-700 mb-2">
-                Time
-              </label>
-              <select
-                id="time"
-                name="time"
-                value={formData.time}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
               >
-                <option value="">Select a time</option>
-                {timeSlots.map(time => (
-                  <option key={time} value={time}>
-                    {time}
-                  </option>
-                ))}
+                <option value="">Select a date</option>
+                {availableDates.map(date => {
+                  const dateObj = new Date(date);
+                  const dayName = dateObj.toLocaleDateString('en-US', { weekday: 'long' });
+                  const formattedDate = dateObj.toLocaleDateString('en-US', { 
+                    month: 'long', 
+                    day: 'numeric',
+                    year: 'numeric'
+                  });
+                  return (
+                    <option key={date} value={date}>
+                      {dayName}, {formattedDate}
+                    </option>
+                  );
+                })}
               </select>
             </div>
           </div>
 
-          <div className="mt-6">
-            <label htmlFor="specialRequests" className="block text-gray-700 mb-2">
+          <div className="mt-6 form-group">
+            <label htmlFor="specialRequests" className="block text-gray-700 mb-2 font-medium">
               Special Requests
             </label>
             <textarea
@@ -231,7 +235,7 @@ export default function ReservationForm() {
               value={formData.specialRequests}
               onChange={handleChange}
               rows={4}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+              className="w-full px-4 py-2.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
               placeholder="Any special requests or dietary requirements?"
             />
           </div>
@@ -239,7 +243,7 @@ export default function ReservationForm() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className={`w-full mt-6 bg-primary text-white py-3 rounded-md transition-all duration-300 ${
+            className={`w-full mt-8 bg-primary text-white py-3 rounded-md transition-all duration-300 font-medium ${
               isSubmitting
                 ? 'opacity-70 cursor-not-allowed'
                 : 'hover:bg-primary/90'

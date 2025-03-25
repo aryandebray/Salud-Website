@@ -5,9 +5,14 @@ interface EmailParams {
   subject: string;
   text: string;
   html?: string;
+  attachments?: {
+    filename: string;
+    content: Buffer;
+    cid: string;
+  }[];
 }
 
-export async function sendEmail({ to, subject, text, html }: EmailParams) {
+export async function sendEmail({ to, subject, text, html, attachments }: EmailParams) {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -22,6 +27,7 @@ export async function sendEmail({ to, subject, text, html }: EmailParams) {
     subject,
     text,
     html: html || text.replace(/\n/g, '<br>'),
+    attachments
   };
 
   try {
