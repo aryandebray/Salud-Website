@@ -60,7 +60,7 @@ export async function POST(request: Request) {
     });
 
     // Read and convert logo to base64
-    const logoPath = path.join(process.cwd(), 'public', 'logo.png');
+    const logoPath = path.join(process.cwd(), 'public', 'logobg.png');
     const logoBase64 = fs.readFileSync(logoPath, { encoding: 'base64' });
     const logoDataUrl = `data:image/png;base64,${logoBase64}`;
 
@@ -163,13 +163,14 @@ export async function POST(request: Request) {
               <p>Our team will review your reservation request and send you a confirmation email within the next few hours. Please note that your reservation is not confirmed until you receive our confirmation email.</p>
 
               <p>If you need to modify or cancel your reservation request, please contact us at:</p>
-              <p>📞 Phone: +1 (555) 123-4567<br>
-                 ✉️ Email: reservations@salud.com</p>
+              <p>📞 Phone: +9831175550<br>
+                 ✉️ Email: salud.calcutta@gmail.com</p>
             </div>
             
             <div class="footer">
               <p>Salud Restaurant<br>
-              123 Italian Street, Foodville, FD 12345</p>
+              G962+F6R, Lake Range, Kalighat, Kolkata, West Bengal 700045
+              </p>
               <p>This is an automated message. Please do not reply to this email.</p>
             </div>
           </div>
