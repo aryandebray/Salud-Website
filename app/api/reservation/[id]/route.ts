@@ -181,7 +181,7 @@ export async function PATCH(
 
             <div class="payment-section">
               <h3 style="color: #0B4D2C;">Complete Your Payment</h3>
-              <p>Please complete the payment using the QR code below to secure your reservation:</p>
+              <p>Please complete the payment of Rs. 2000 using the QR code below to secure your reservation:</p>
               <div class="qr-code-container" style="width: 200px; height: 200px; margin: 15px auto; text-align: center;">
                 <img src="cid:qrcode" 
                      alt="Payment QR Code" 
@@ -225,7 +225,6 @@ export async function PATCH(
               <li>Email us at salud.calcutta@gmail.com</li>
             </ul>
 
-        
           ${footerTemplate}
         `;
       }
@@ -239,7 +238,7 @@ export async function PATCH(
       html: getEmailTemplate(),
       attachments: [
         {
-          filename: 'logo.png',
+          filename: 'logobg.png',
           content: logoBuffer,
           cid: 'logo'
         },

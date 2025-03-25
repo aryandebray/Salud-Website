@@ -60,7 +60,7 @@ export async function POST(request: Request) {
     });
 
     // Read and convert logo to base64
-    const logoPath = path.join(process.cwd(), 'public', 'logo.png');
+    const logoPath = path.join(process.cwd(), 'public', 'logobg.png');
     const logoBase64 = fs.readFileSync(logoPath, { encoding: 'base64' });
     const logoDataUrl = `data:image/png;base64,${logoBase64}`;
 
