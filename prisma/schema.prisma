@@ -55,6 +55,6 @@ model MenuItem {
   name        String
   description String?
   category    MenuCategory
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 }
