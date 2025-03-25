@@ -38,7 +38,7 @@ export async function PATCH(
     });
 
     // Read and convert logo to base64
-    const logoPath = path.join(process.cwd(), 'public', 'logo.png');
+    const logoPath = path.join(process.cwd(), 'public', 'logobg.png');
     const logoBuffer = fs.readFileSync(logoPath);
     const logoBase64 = logoBuffer.toString('base64');
 
@@ -241,7 +241,7 @@ export async function PATCH(
       html: getEmailTemplate(),
       attachments: [
         {
-          filename: 'logo.png',
+          filename: 'logobg.png',
           content: logoBuffer,
           cid: 'logo'
         },
