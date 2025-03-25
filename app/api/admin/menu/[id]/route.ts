@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { MenuCategory } from '@prisma/client';
 
 // GET /api/admin/menu/[id] - Get a single menu item
 export async function GET(
@@ -35,13 +36,29 @@ export async function PUT(
 ) {
   try {
     const body = await request.json();
-    const { name, description } = body;
+    const { name, description, category } = body;
+
+    if (!name || !category) {
+      return NextResponse.json(
+        { error: 'Name and category are required' },
+        { status: 400 }
+      );
+    }
+
+    // Validate category
+    if (!Object.values(MenuCategory).includes(category)) {
+      return NextResponse.json(
+        { error: 'Invalid category' },
+        { status: 400 }
+      );
+    }
 
     const menuItem = await prisma.menuItem.update({
       where: { id: params.id },
       data: {
         name,
         description,
+        category: category as MenuCategory,
       },
     });
 

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { MenuCategory } from '@prisma/client';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -23,11 +24,19 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, description } = body;
+    const { name, description, category } = body;
 
-    if (!name) {
+    if (!name || !category) {
       return NextResponse.json(
-        { error: 'Name is required' },
+        { error: 'Name and category are required' },
+        { status: 400 }
+      );
+    }
+
+    // Validate category
+    if (!Object.values(MenuCategory).includes(category)) {
+      return NextResponse.json(
+        { error: 'Invalid category' },
         { status: 400 }
       );
     }
@@ -36,6 +45,7 @@ export async function POST(request: Request) {
       data: {
         name,
         description,
+        category: category as MenuCategory,
       },
     });
 

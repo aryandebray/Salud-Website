@@ -12,10 +12,7 @@ export async function POST(request: Request) {
       data: {
         name: data.name,
         description: data.description,
-        price: parseFloat(data.price),
         category: data.category,
-        imageUrl: data.imageUrl,
-        menuId: data.menuId,
       },
     });
     return NextResponse.json(menuItem);
@@ -41,10 +38,7 @@ export async function PUT(request: Request) {
       data: {
         name: updateData.name,
         description: updateData.description,
-        price: parseFloat(updateData.price),
         category: updateData.category,
-        imageUrl: updateData.imageUrl,
-        isAvailable: updateData.isAvailable,
       },
     });
 
