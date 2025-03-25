@@ -2,22 +2,23 @@ import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import fs from 'fs';
 import path from 'path';
-import { prisma } from '@/lib/prisma';
+import prisma from '@/lib/prisma';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export async function POST(request: Request) {
   try {
-    const {
-      name,
-      email,
-      phone,
-      date,
-      time,
-      guests,
-      specialRequests
-    } = await request.json();
+    const body = await request.json();
+    const { name, email, date, time, guests } = body;
+
+    // Validate required fields
+    if (!name || !email || !date || !time || !guests) {
+      return NextResponse.json(
+        { error: 'All fields are required' },
+        { status: 400 }
+      );
+    }
 
     console.log('Creating new reservation:', {
       name,
@@ -25,7 +26,6 @@ export async function POST(request: Request) {
       date,
       time,
       guests,
-      specialRequests
     });
 
     // Create email transporter
@@ -37,18 +37,16 @@ export async function POST(request: Request) {
       },
     });
 
-    // Save reservation to database
+    // Create the reservation
     const reservation = await prisma.reservation.create({
       data: {
         name,
         email,
-        phone,
         date: new Date(date),
         time,
         guests: parseInt(guests),
-        specialRequests,
-        status: 'PENDING'
-      }
+        phone: body.phone, // Use the phone number from the form
+      },
     });
 
     console.log('Reservation created successfully:', reservation);
@@ -97,11 +95,11 @@ export async function POST(request: Request) {
               height: auto;
               display: inline-block;
             }
-            .logo-fallback {
-              color: white;
-              font-size: 24px;
-              font-weight: bold;
-              font-family: serif;
+            img {
+              max-width: 100%;
+              height: auto;
+              display: block;
+              margin: 0 auto;
             }
             .content {
               background-color: #ffffff;
@@ -140,8 +138,12 @@ export async function POST(request: Request) {
         <body>
           <div class="email-container">
             <div class="header">
-              <img src="${logoDataUrl}" alt="Salud Restaurant" class="logo" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
-              <div class="logo-fallback" style="display: none;">Salud Restaurant</div>
+              <img src="${logoDataUrl}" 
+                   alt="Salud Restaurant" 
+                   class="logo" 
+                   width="200" 
+                   height="auto"
+                   style="display: inline-block; max-width: 200px;">
             </div>
             <div class="content">
               <h1 style="color: #0B4D2C; text-align: center;">Reservation Request Received</h1>
@@ -153,8 +155,6 @@ export async function POST(request: Request) {
                 <p><strong>Date:</strong> ${formattedDate}</p>
                 <p><strong>Time:</strong> ${time}</p>
                 <p><strong>Number of Guests:</strong> ${guests}</p>
-                <p><strong>Contact Number:</strong> ${phone}</p>
-                ${specialRequests ? `<p><strong>Special Requests:</strong> ${specialRequests}</p>` : ''}
               </div>
 
               <div class="divider"></div>
@@ -231,8 +231,12 @@ export async function POST(request: Request) {
         <body>
           <div class="email-container">
             <div class="header">
-              <img src="${logoDataUrl}" alt="Salud Restaurant" class="logo" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
-              <div class="logo-fallback" style="display: none;">Salud Restaurant</div>
+              <img src="${logoDataUrl}" 
+                   alt="Salud Restaurant" 
+                   class="logo" 
+                   width="200" 
+                   height="auto"
+                   style="display: inline-block; max-width: 200px;">
             </div>
             <div class="content">
               <h1 style="color: #0B4D2C;">New Reservation Request</h1>
@@ -241,18 +245,14 @@ export async function POST(request: Request) {
                 <h2 style="color: #0B4D2C; margin-top: 0;">Customer Details</h2>
                 <p><strong>Name:</strong> ${name}</p>
                 <p><strong>Email:</strong> ${email}</p>
-                <p><strong>Phone:</strong> ${phone}</p>
-                
-                <h2 style="color: #0B4D2C;">Reservation Details</h2>
                 <p><strong>Date:</strong> ${formattedDate}</p>
                 <p><strong>Time:</strong> ${time}</p>
                 <p><strong>Number of Guests:</strong> ${guests}</p>
-                ${specialRequests ? `<p><strong>Special Requests:</strong> ${specialRequests}</p>` : ''}
               </div>
 
               <div style="margin-top: 20px;">
                 <p>To manage this reservation, please visit the admin dashboard:</p>
-                <p><a href="${process.env.NEXT_PUBLIC_BASE_URL}/admin/reservations" style="color: #0B4D2C;">View in Dashboard</a></p>
+                <p><a href="/admin/reservations" style="color: #0B4D2C;">View in Dashboard</a></p>
               </div>
             </div>
           </div>
@@ -265,7 +265,8 @@ export async function POST(request: Request) {
       from: process.env.EMAIL_USER,
       to: email,
       subject: 'Reservation Request Received - Salud Restaurant',
-      html: customerEmailTemplate
+      html: customerEmailTemplate,
+      attachDataUrls: true // Enable data URL images
     });
 
     // Send notification email to restaurant
@@ -273,15 +274,13 @@ export async function POST(request: Request) {
       from: process.env.EMAIL_USER,
       to: process.env.EMAIL_RECIPIENT || process.env.EMAIL_USER,
       subject: `New Reservation Request from ${name}`,
-      html: restaurantEmailTemplate
+      html: restaurantEmailTemplate,
+      attachDataUrls: true // Enable data URL images
     });
 
-    return NextResponse.json(
-      { message: 'Reservation request submitted successfully! We will send you a confirmation email shortly.' },
-      { status: 200 }
-    );
+    return NextResponse.json(reservation);
   } catch (error) {
-    console.error('Error processing reservation:', error);
+    console.error('Failed to process reservation:', error);
     return NextResponse.json(
       { error: 'Failed to process reservation' },
       { status: 500 }

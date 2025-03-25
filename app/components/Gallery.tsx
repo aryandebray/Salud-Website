@@ -8,32 +8,32 @@ export default function Gallery() {
     {
       src: '/gallery/pasta.jpg',
       alt: 'Fresh Italian Pasta',
-      title: 'Handmade Pasta'
+      title: 'Handmade'
     },
     {
       src: '/gallery/pizza.jpg',
       alt: 'Wood-fired Pizza',
-      title: 'Authentic Pizza'
+      title: 'Authentic'
     },
     {
       src: '/gallery/wine.jpg',
       alt: 'Wine Selection',
-      title: 'Fine Wines'
+      title: 'Fine'
     },
     {
       src: '/gallery/dessert.jpg',
       alt: 'Italian Desserts',
-      title: 'Sweet Delights'
+      title: 'Sweet'
     },
     {
       src: '/gallery/interior.jpg',
       alt: 'Restaurant Interior',
-      title: 'Elegant Ambiance'
+      title: 'Elegant'
     },
     {
       src: '/gallery/chef.jpg',
       alt: 'Our Chef',
-      title: 'Expert Chefs'
+      title: 'Expert Chef'
     }
   ];
 
@@ -49,7 +49,7 @@ export default function Gallery() {
         >
           <h2 className="font-serif text-4xl md:text-5xl mb-4 text-primary">Our Gallery</h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            Take a visual journey through our culinary creations and elegant atmosphere
+          An intimate dining experience in Kolkata with a rotational menu, celebrating global flavors. 
           </p>
         </motion.div>
 

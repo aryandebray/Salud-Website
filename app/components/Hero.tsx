@@ -36,7 +36,7 @@ export default function Hero() {
             Welcome to Salud
           </h1>
           <p className="text-xl md:text-2xl mb-8 text-gray-200 drop-shadow-md">
-            Experience authentic Italian cuisine in an elegant atmosphere
+            Where every meal tells a story.
           </p>
           <div className="flex gap-4">
             <Link 

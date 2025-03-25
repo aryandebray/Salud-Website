@@ -1,21 +1,33 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+import prisma from '@/lib/prisma';
+import path from 'path';
+import fs from 'fs';
 
 // API route for handling individual reservation operations
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function PATCH(
   request: Request,
   { params }: { params: { id: string } }
 ) {
   try {
-    const { status, adminNote } = await request.json();
-    
-    // Update the reservation status
+    const { id } = params;
+    const body = await request.json();
+    const { status, adminNote } = body;
+
+    if (!status) {
+      return NextResponse.json(
+        { error: 'Missing required fields' },
+        { status: 400 }
+      );
+    }
+
     const updatedReservation = await prisma.reservation.update({
-      where: { id: params.id },
+      where: { id },
       data: { 
         status,
-        adminNote,
-        updatedAt: new Date()
+        ...(adminNote && { adminNote })
       },
     });
 
@@ -24,6 +36,14 @@ export async function PATCH(
       const emailSubject = status === 'CONFIRMED' 
         ? '¡Your Reservation at Salud is Confirmed!' 
         : 'Update on Your Salud Reservation';
+
+      // Read and convert logo to base64
+      const logoPath = path.join(process.cwd(), 'public', 'logo.png');
+      const logoBuffer = fs.readFileSync(logoPath);
+
+      // Read and convert QR code to base64
+      const qrCodePath = path.join(process.cwd(), 'public', 'payment-qr.png');
+      const qrCodeBuffer = fs.readFileSync(qrCodePath);
 
       const baseEmailStyle = `
         font-family: 'Arial', sans-serif;
@@ -37,6 +57,8 @@ export async function PATCH(
       `;
 
       const headerStyle = `
+        background-color: #0B4D2C;
+        padding: 20px;
         text-align: center;
         margin-bottom: 30px;
       `;
@@ -63,8 +85,8 @@ export async function PATCH(
       const emailContent = `
         <div style="${baseEmailStyle}">
           <div style="${headerStyle}">
-            <img src="${process.env.NEXT_PUBLIC_BASE_URL}/logo.png" alt="Salud Restaurant" style="${logoStyle}">
-            <h1 style="color: #1a1a1a; font-size: 24px; margin-bottom: 10px;">
+            <img src="cid:logo" alt="Salud Restaurant" style="${logoStyle}">
+            <h1 style="color: #ffffff; font-size: 24px; margin-bottom: 10px;">
               ${status === 'CONFIRMED' ? '¡Reservation Confirmed!' : 'Reservation Update'}
             </h1>
           </div>
@@ -82,6 +104,18 @@ export async function PATCH(
               ${updatedReservation.specialRequests ? `<p style="margin: 5px 0;"><strong>Special Requests:</strong> ${updatedReservation.specialRequests}</p>` : ''}
             </div>
             ${adminNote ? `<p style="color: #333; font-style: italic;">${adminNote}</p>` : ''}
+            
+            <div style="background-color: #F5F1EA; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center;">
+              <h3 style="color: #0B4D2C; margin-top: 0;">Complete Your Payment</h3>
+              <p>Please complete the payment using the QR code below to secure your reservation:</p>
+              <div style="width: 200px; height: 200px; margin: 15px auto;">
+                <img src="cid:qrcode" 
+                     alt="Payment QR Code" 
+                     style="width: 100%; height: 100%; object-fit: contain;">
+              </div>
+              <p style="font-size: 14px; color: #666;">Scan this QR code to complete your payment</p>
+            </div>
+
             <p style="color: #333;">We look forward to serving you an unforgettable Italian dining experience!</p>
             <a href="${process.env.NEXT_PUBLIC_BASE_URL}" style="${buttonStyle}">View Menu</a>
           ` : `
@@ -106,14 +140,30 @@ export async function PATCH(
       `;
 
       const { sendEmail } = await import('@/lib/email');
-      await sendEmail({
+      
+      // Create email options with attachments
+      const emailOptions = {
         to: updatedReservation.email,
         subject: emailSubject,
         text: status === 'CONFIRMED' 
           ? `Your reservation for ${updatedReservation.guests} guests on ${new Date(updatedReservation.date).toLocaleDateString()} at ${updatedReservation.time} has been confirmed.`
           : `Unfortunately, we are unable to accommodate your reservation for ${updatedReservation.guests} guests on ${new Date(updatedReservation.date).toLocaleDateString()} at ${updatedReservation.time}.`,
         html: emailContent,
-      });
+        attachments: [
+          {
+            filename: 'logo.png',
+            content: logoBuffer,
+            cid: 'logo'
+          },
+          ...(status === 'CONFIRMED' ? [{
+            filename: 'payment-qr.png',
+            content: qrCodeBuffer,
+            cid: 'qrcode'
+          }] : [])
+        ]
+      };
+
+      await sendEmail(emailOptions);
     } catch (emailError) {
       console.error('Failed to send email:', emailError);
       // Continue with the response even if email fails
@@ -134,32 +184,15 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const reservation = await prisma.reservation.findUnique({
-      where: { id: params.id },
-    });
-
-    if (!reservation) {
-      return NextResponse.json(
-        { error: 'Reservation not found' },
-        { status: 404 }
-      );
-    }
-
-    // Only allow deletion of confirmed or rejected reservations
-    if (reservation.status === 'PENDING') {
-      return NextResponse.json(
-        { error: 'Cannot delete pending reservations' },
-        { status: 400 }
-      );
-    }
-
+    const { id } = params;
+    
     await prisma.reservation.delete({
-      where: { id: params.id },
+      where: { id },
     });
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Error deleting reservation:', error);
+    console.error('Failed to delete reservation:', error);
     return NextResponse.json(
       { error: 'Failed to delete reservation' },
       { status: 500 }

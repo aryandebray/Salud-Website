@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
+import prisma from '@/lib/prisma';
 import nodemailer from 'nodemailer';
 import fs from 'fs';
 import path from 'path';
@@ -39,8 +39,13 @@ export async function PATCH(
 
     // Read and convert logo to base64
     const logoPath = path.join(process.cwd(), 'public', 'logo.png');
-    const logoBase64 = fs.readFileSync(logoPath, { encoding: 'base64' });
-    const logoDataUrl = `data:image/png;base64,${logoBase64}`;
+    const logoBuffer = fs.readFileSync(logoPath);
+    const logoBase64 = logoBuffer.toString('base64');
+
+    // Read and convert QR code to base64
+    const qrCodePath = path.join(process.cwd(), 'public', 'payment-qr.png');
+    const qrCodeBuffer = fs.readFileSync(qrCodePath);
+    const qrCodeBase64 = qrCodeBuffer.toString('base64');
 
     // Prepare email template based on status
     const getEmailTemplate = () => {
@@ -74,11 +79,11 @@ export async function PATCH(
                 height: auto;
                 display: inline-block;
               }
-              .logo-fallback {
-                color: white;
-                font-size: 24px;
-                font-weight: bold;
-                font-family: serif;
+              img {
+                max-width: 100%;
+                height: auto;
+                display: block;
+                margin: 0 auto;
               }
               .content {
                 background-color: #ffffff;
@@ -92,6 +97,24 @@ export async function PATCH(
                 padding: 20px;
                 border-radius: 8px;
                 margin: 20px 0;
+              }
+              .payment-section {
+                background-color: #F5F1EA;
+                padding: 20px;
+                border-radius: 8px;
+                margin: 20px 0;
+                text-align: center;
+              }
+              .qr-code-container {
+                width: 200px;
+                height: 200px;
+                margin: 15px auto;
+                text-align: center;
+              }
+              .qr-code {
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
               }
               .footer {
                 text-align: center;
@@ -119,8 +142,10 @@ export async function PATCH(
           <body>
             <div class="email-container">
               <div class="header">
-                <img src="${logoDataUrl}" alt="Salud Restaurant" class="logo" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
-                <div class="logo-fallback" style="display: none;">Salud Restaurant</div>
+                <img src="cid:logo" 
+                     alt="Salud Restaurant" 
+                     class="logo" 
+                     style="max-width: 200px; height: auto; display: inline-block;">
               </div>
               <div class="content">
       `;
@@ -150,6 +175,17 @@ export async function PATCH(
               <p><strong>Number of Guests:</strong> ${reservation.guests}</p>
               ${reservation.specialRequests ? `<p><strong>Special Requests:</strong> ${reservation.specialRequests}</p>` : ''}
               ${adminNote ? `<p><strong>Note:</strong> ${adminNote}</p>` : ''}
+            </div>
+
+            <div class="payment-section">
+              <h3 style="color: #0B4D2C;">Complete Your Payment</h3>
+              <p>Please complete the payment using the QR code below to secure your reservation:</p>
+              <div class="qr-code-container" style="width: 200px; height: 200px; margin: 15px auto; text-align: center;">
+                <img src="cid:qrcode" 
+                     alt="Payment QR Code" 
+                     style="width: 100%; height: 100%; object-fit: contain;">
+              </div>
+              <p style="font-size: 14px; color: #666;">Scan this QR code to complete your payment</p>
             </div>
 
             <h3 style="color: #0B4D2C;">Important Information</h3>
@@ -204,7 +240,19 @@ export async function PATCH(
       from: process.env.EMAIL_USER,
       to: reservation.email,
       subject: `Reservation ${status.toLowerCase()} - Salud Restaurant`,
-      html: getEmailTemplate()
+      html: getEmailTemplate(),
+      attachments: [
+        {
+          filename: 'logo.png',
+          content: logoBuffer,
+          cid: 'logo'
+        },
+        ...(status === 'CONFIRMED' ? [{
+          filename: 'payment-qr.png',
+          content: qrCodeBuffer,
+          cid: 'qrcode'
+        }] : [])
+      ]
     });
 
     return NextResponse.json(
