@@ -153,7 +153,7 @@ export async function PATCH(
       const footerTemplate = `
               <div class="footer">
                 <p>Salud Restaurant<br>
-                123 Italian Street, Foodville, FD 12345</p>
+                G962+F6R, Lake Range, Kalighat, Kolkata, West Bengal 700045</p>
                 <p>📞 Phone: +91 9831175550<br>
                    ✉️ Email: salud.calcutta@gmail.com</p>
                 <p>This is an automated message. Please do not reply to this email.</p>
@@ -181,7 +181,7 @@ export async function PATCH(
 
             <div class="payment-section">
               <h3 style="color: #0B4D2C;">Complete Your Payment</h3>
-              <p>Please complete the payment using the QR code below to secure your reservation:</p>
+              <p>Please complete the payment of Rs. 2000 using the QR code below to secure your reservation:</p>
               <div class="qr-code-container" style="width: 200px; height: 200px; margin: 15px auto; text-align: center;">
                 <img src="cid:qrcode" 
                      alt="Payment QR Code" 
@@ -226,7 +226,7 @@ export async function PATCH(
             </ul>
 
             <div style="text-align: center;">
-              <a href="${process.env.NEXT_PUBLIC_BASE_URL}#reservation" class="button">Make New Reservation</a>
+              <a href="https://salud-calcutta.vercel.app/#reservation" class="button">Make New Reservation</a>
             </div>
           ${footerTemplate}
         `;
