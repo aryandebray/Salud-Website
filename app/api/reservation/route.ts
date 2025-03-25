@@ -279,7 +279,11 @@ export async function POST(request: Request) {
       attachDataUrls: true // Enable data URL images
     });
 
-    return NextResponse.json(reservation);
+    return NextResponse.json({
+      success: true,
+      message: 'Reservation request received! Please check your email for confirmation.',
+      data: reservation
+    });
   } catch (error) {
     console.error('Failed to process reservation:', error);
     return NextResponse.json(
