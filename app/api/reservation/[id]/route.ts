@@ -198,7 +198,7 @@ export async function PATCH(
             </ul>
 
             <div style="text-align: center;">
-              <a href="${process.env.NEXT_PUBLIC_BASE_URL}/menu" class="button">View Our Menu</a>
+              <a href="https://salud-calcutta.vercel.app/menu" class="button">View Our Menu</a>
             </div>
 
             <p>If you need to modify or cancel your reservation, please contact us at:</p>
