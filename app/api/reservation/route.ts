@@ -33,7 +33,7 @@ export async function POST(request: Request) {
       service: 'gmail',
       auth: {
         user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
+        pass: process.env.EMAIL_APP_PASSWORD,
       },
     });
 
@@ -46,6 +46,7 @@ export async function POST(request: Request) {
         time,
         guests: parseInt(guests),
         phone: body.phone, // Use the phone number from the form
+        status: 'PENDING', // Set default status
       },
     });
 
@@ -261,23 +262,30 @@ export async function POST(request: Request) {
       </html>
     `;
 
-    // Send confirmation email to customer
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: email,
-      subject: 'Reservation Request Received - Salud Restaurant',
-      html: customerEmailTemplate,
-      attachDataUrls: true // Enable data URL images
-    });
+    try {
+      // Send confirmation email to customer
+      await transporter.sendMail({
+        from: process.env.EMAIL_USER,
+        to: email,
+        subject: 'Reservation Request Received - Salud Restaurant',
+        html: customerEmailTemplate,
+        attachDataUrls: true // Enable data URL images
+      });
 
-    // Send notification email to restaurant
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: process.env.EMAIL_RECIPIENT || process.env.EMAIL_USER,
-      subject: `New Reservation Request from ${name}`,
-      html: restaurantEmailTemplate,
-      attachDataUrls: true // Enable data URL images
-    });
+      // Send notification email to restaurant
+      await transporter.sendMail({
+        from: process.env.EMAIL_USER,
+        to: process.env.EMAIL_RECIPIENT || process.env.EMAIL_USER,
+        subject: `New Reservation Request from ${name}`,
+        html: restaurantEmailTemplate,
+        attachDataUrls: true // Enable data URL images
+      });
+
+      console.log('Emails sent successfully');
+    } catch (emailError) {
+      console.error('Failed to send emails:', emailError);
+      // Continue with the response even if email fails
+    }
 
     return NextResponse.json({
       success: true,

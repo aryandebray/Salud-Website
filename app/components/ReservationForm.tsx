@@ -67,7 +67,10 @@ export default function ReservationForm() {
       const data = await response.json();
 
       if (response.ok) {
-        setStatus({ type: 'success', message: data.message });
+        setStatus({ 
+          type: 'success', 
+          message: data.message || 'Reservation request received! Please check your email for confirmation.'
+        });
         setFormData({
           name: '',
           email: '',
@@ -77,12 +80,16 @@ export default function ReservationForm() {
           specialRequests: ''
         });
       } else {
-        setStatus({ type: 'error', message: data.error });
+        setStatus({ 
+          type: 'error', 
+          message: data.error || 'Failed to submit reservation. Please try again or contact us directly.'
+        });
       }
     } catch (error) {
+      console.error('Form submission error:', error);
       setStatus({
         type: 'error',
-        message: 'An error occurred. Please try again later.'
+        message: 'An error occurred. Please try again later or contact us directly.'
       });
     } finally {
       setIsSubmitting(false);
