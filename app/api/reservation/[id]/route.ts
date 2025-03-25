@@ -197,10 +197,6 @@ export async function PATCH(
               <li>For parties larger than 6, a deposit may be required</li>
             </ul>
 
-            <div style="text-align: center;">
-              <a href="https://salud-calcutta.vercel.app/menu" class="button">View Our Menu</a>
-            </div>
-
             <p>If you need to modify or cancel your reservation, please contact us at:</p>
             <p>📞 Phone: +91 9831175550<br>
                ✉️ Email: salud.calcutta@gmail.com</p>
