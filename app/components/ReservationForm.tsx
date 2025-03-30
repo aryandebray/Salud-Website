@@ -106,7 +106,7 @@ export default function ReservationForm() {
           viewport={{ once: true }}
           className="max-w-2xl mx-auto text-center text-white mb-12"
         >
-          <h2 className="font-serif text-4xl md:text-5xl mb-4">Make a Reservation</h2>
+          <h2 className="font-serif text-4xl md:text-5xl mb-4">Request Reservation</h2>
           <p className="text-lg text-gray-200">
             Book your table at Salud and experience authentic Thai cuisine
           </p>
