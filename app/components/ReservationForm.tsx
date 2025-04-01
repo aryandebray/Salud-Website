@@ -103,7 +103,7 @@ export default function ReservationForm() {
           <p className="text-lg text-gray-200">
             Book your table at Salud and experience authentic Thai cuisine
           </p>
-          <p className="text-base text-gray-300 mt-2">
+          <p className="text-xl font-semibold text-[#0B4D2C] bg-white/90 rounded-md py-2 px-4 mt-4 inline-block">
             Price per person: Rs. 2100
           </p>
         </motion.div>
@@ -195,7 +195,7 @@ export default function ReservationForm() {
                   </option>
                 ))}
               </select>
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="text-sm font-medium text-[#0B4D2C] mt-2 border border-[#0B4D2C] rounded-md py-1 px-2 inline-block">
                 Price per person: Rs. 2100
               </p>
             </div>
