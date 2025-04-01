@@ -38,7 +38,7 @@ export async function PATCH(
     });
 
     // Read and convert logo to base64
-    const logoPath = path.join(process.cwd(), 'public', 'logo.png');
+    const logoPath = path.join(process.cwd(), 'public', 'logobg.png');
     const logoBuffer = fs.readFileSync(logoPath);
     const logoBase64 = logoBuffer.toString('base64');
 
@@ -153,7 +153,7 @@ export async function PATCH(
       const footerTemplate = `
               <div class="footer">
                 <p>Salud Restaurant<br>
-                123 Italian Street, Foodville, FD 12345</p>
+                G962+F6R, Lake Range, Kalighat, Kolkata, West Bengal 700045</p>
                 <p>📞 Phone: +91 9831175550<br>
                    ✉️ Email: salud.calcutta@gmail.com</p>
                 <p>This is an automated message. Please do not reply to this email.</p>
@@ -181,7 +181,7 @@ export async function PATCH(
 
             <div class="payment-section">
               <h3 style="color: #0B4D2C;">Complete Your Payment</h3>
-              <p>Please complete the payment using the QR code below to secure your reservation:</p>
+              <p>Please complete the payment of Rs. 2000 using the QR code below to secure your reservation:</p>
               <div class="qr-code-container" style="width: 200px; height: 200px; margin: 15px auto; text-align: center;">
                 <img src="cid:qrcode" 
                      alt="Payment QR Code" 
@@ -196,10 +196,6 @@ export async function PATCH(
               <li>Your table will be held for 15 minutes after the reservation time</li>
               <li>For parties larger than 6, a deposit may be required</li>
             </ul>
-
-            <div style="text-align: center;">
-              <a href="${process.env.NEXT_PUBLIC_BASE_URL}/menu" class="button">View Our Menu</a>
-            </div>
 
             <p>If you need to modify or cancel your reservation, please contact us at:</p>
             <p>📞 Phone: +91 9831175550<br>
@@ -229,9 +225,6 @@ export async function PATCH(
               <li>Email us at salud.calcutta@gmail.com</li>
             </ul>
 
-            <div style="text-align: center;">
-              <a href="${process.env.NEXT_PUBLIC_BASE_URL}#reservation" class="button">Make New Reservation</a>
-            </div>
           ${footerTemplate}
         `;
       }
@@ -245,7 +238,7 @@ export async function PATCH(
       html: getEmailTemplate(),
       attachments: [
         {
-          filename: 'logo.png',
+          filename: 'logobg.png',
           content: logoBuffer,
           cid: 'logo'
         },
