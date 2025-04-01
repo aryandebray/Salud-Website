@@ -44,7 +44,7 @@ export default function Hero() {
             Welcome to <span className="text-[#0B4D2C] font-bold">Salud</span>
           </h1>
           <p className="text-xl md:text-2xl mb-8 text-white drop-shadow-lg max-w-xl font-medium">
-            Experience authentic Thai cuisine in an elegant setting. Where every meal tells a story and every visit creates memories.
+            Where every meal tells a story
           </p>
           <div className="flex gap-4">
             <motion.div
