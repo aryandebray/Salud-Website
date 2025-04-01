@@ -101,23 +101,23 @@ export default function MenuManagementPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F7E6D3] p-6">
+    <div className="min-h-screen bg-[#F7E6D3] p-4 sm:p-6">
       <div className="container mx-auto">
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-[#C08261]">Menu Management</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-[#C08261]">Menu Management</h1>
             <p className="text-gray-600 mt-1">Manage your restaurant's menu items</p>
           </div>
-          <div className="flex gap-4">
+          <div className="flex flex-wrap gap-3 sm:gap-4">
             <button
               onClick={() => router.push('/admin/dashboard')}
-              className="px-4 py-2 bg-[#C08261] text-white rounded-md hover:bg-[#B4724F] transition-colors duration-200"
+              className="px-3 py-1.5 sm:px-4 sm:py-2 bg-[#C08261] text-white rounded-md hover:bg-[#B4724F] transition-colors duration-200 text-sm"
             >
               Back to Dashboard
             </button>
             <button
               onClick={() => setShowForm(true)}
-              className="px-4 py-2 bg-[#C08261] text-white rounded-md hover:bg-[#B4724F] transition-colors duration-200"
+              className="px-3 py-1.5 sm:px-4 sm:py-2 bg-[#C08261] text-white rounded-md hover:bg-[#B4724F] transition-colors duration-200 text-sm"
             >
               Add Menu Item
             </button>
@@ -201,26 +201,26 @@ export default function MenuManagementPage() {
           </div>
         )}
 
-        <div className="grid gap-6">
+        <div className="grid gap-4 sm:gap-6">
           {menuItems.map((item) => (
             <div
               key={item.id}
-              className="bg-white p-6 rounded-lg shadow-md flex justify-between items-center border border-[#F7E6D3]"
+              className="bg-white p-4 sm:p-6 rounded-lg shadow-md flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border border-[#F7E6D3]"
             >
-              <div>
-                <div className="flex items-center gap-3">
-                  <h3 className="text-xl font-semibold text-[#C08261]">{item.name}</h3>
+              <div className="w-full sm:w-auto">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                  <h3 className="text-lg sm:text-xl font-semibold text-[#C08261]">{item.name}</h3>
                   <span className="text-sm bg-[#F7E6D3] text-[#C08261] px-2 py-1 rounded">
                     {categoryDisplayNames[item.category]}
                   </span>
                 </div>
                 {item.description && (
-                  <p className="text-gray-600 mt-1">{item.description}</p>
+                  <p className="text-gray-600 mt-1 text-sm sm:text-base">{item.description}</p>
                 )}
               </div>
               <button
                 onClick={() => item.id && handleDelete(item.id)}
-                className="text-red-500 hover:text-red-700"
+                className="text-red-500 hover:text-red-700 text-sm sm:text-base"
               >
                 Delete
               </button>

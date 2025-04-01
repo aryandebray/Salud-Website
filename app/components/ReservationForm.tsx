@@ -67,10 +67,7 @@ export default function ReservationForm() {
       const data = await response.json();
 
       if (response.ok) {
-        setStatus({ 
-          type: 'success', 
-          message: data.message || 'Reservation request received! Please check your email for confirmation.'
-        });
+        setStatus({ type: 'success', message: data.message });
         setFormData({
           name: '',
           email: '',
@@ -80,16 +77,12 @@ export default function ReservationForm() {
           specialRequests: ''
         });
       } else {
-        setStatus({ 
-          type: 'error', 
-          message: data.error || 'Failed to submit reservation. Please try again or contact us directly.'
-        });
+        setStatus({ type: 'error', message: data.error });
       }
     } catch (error) {
-      console.error('Form submission error:', error);
       setStatus({
         type: 'error',
-        message: 'An error occurred. Please try again later or contact us directly.'
+        message: 'An error occurred. Please try again later.'
       });
     } finally {
       setIsSubmitting(false);
@@ -109,6 +102,9 @@ export default function ReservationForm() {
           <h2 className="font-serif text-4xl md:text-5xl mb-4">Request Reservation</h2>
           <p className="text-lg text-gray-200">
             Book your table at Salud and experience authentic Thai cuisine
+          </p>
+          <p className="text-xl font-semibold text-[#0B4D2C] bg-white/90 rounded-md py-2 px-4 mt-4 inline-block">
+            Price per person: Rs. 2100
           </p>
         </motion.div>
 
@@ -199,6 +195,9 @@ export default function ReservationForm() {
                   </option>
                 ))}
               </select>
+              <p className="text-sm font-medium text-[#0B4D2C] mt-2 border border-[#0B4D2C] rounded-md py-1 px-2 inline-block">
+                Price per person: Rs. 2100
+              </p>
             </div>
 
             <div className="form-group">

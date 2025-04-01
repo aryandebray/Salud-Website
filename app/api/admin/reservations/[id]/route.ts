@@ -38,7 +38,7 @@ export async function PATCH(
         : 'Update on Your Salud Reservation';
 
       // Read and convert logo to base64
-      const logoPath = path.join(process.cwd(), 'public', 'logo.png');
+      const logoPath = path.join(process.cwd(), 'public', 'logobg.png');
       const logoBuffer = fs.readFileSync(logoPath);
 
       // Read and convert QR code to base64
@@ -101,6 +101,8 @@ export async function PATCH(
               <p style="margin: 5px 0;"><strong>Date:</strong> ${new Date(updatedReservation.date).toLocaleDateString()}</p>
               <p style="margin: 5px 0;"><strong>Time:</strong> ${updatedReservation.time}</p>
               <p style="margin: 5px 0;"><strong>Guests:</strong> ${updatedReservation.guests}</p>
+              <p style="margin: 5px 0;"><strong>Price per person:</strong> Rs. 2100</p>
+              <p style="margin: 5px 0;"><strong>Total Amount:</strong> Rs. ${updatedReservation.guests * 2100}</p>
               ${updatedReservation.specialRequests ? `<p style="margin: 5px 0;"><strong>Special Requests:</strong> ${updatedReservation.specialRequests}</p>` : ''}
             </div>
             ${adminNote ? `<p style="color: #333; font-style: italic;">${adminNote}</p>` : ''}
@@ -116,20 +118,22 @@ export async function PATCH(
               <p style="font-size: 14px; color: #666;">Scan this QR code to complete your payment</p>
             </div>
 
-            <p style="color: #333;">We look forward to serving you an unforgettable Italian dining experience!</p>
-            <a href="${process.env.NEXT_PUBLIC_BASE_URL}" style="${buttonStyle}">View Menu</a>
+            <p style="color: #333;">We look forward to serving you an unforgettable dining experience!</p>
+            
           ` : `
             <p style="color: #333; font-size: 16px;">
               We regret to inform you that we are unable to accommodate your reservation for ${updatedReservation.guests} guests on ${new Date(updatedReservation.date).toLocaleDateString()} at ${updatedReservation.time}.
             </p>
             ${adminNote ? `<p style="color: #333; font-style: italic;">${adminNote}</p>` : ''}
             <p style="color: #333;">We sincerely apologize for any inconvenience caused and hope to welcome you another time.</p>
-            <a href="${process.env.NEXT_PUBLIC_BASE_URL}" style="${buttonStyle}">Make New Reservation</a>
+            
           `}
 
           <div style="${footerStyle}">
             <p>Salud Restaurant</p>
-            <p>For any questions, please contact us at ${process.env.EMAIL_USER}</p>
+            <p>G962+F6R, Lake Range, Kalighat, Kolkata, West Bengal 700045</p>
+            <p>📞 Phone: +91 9831175550<br>
+               ✉️ Email: salud.calcutta@gmail.com</p>
             <div style="margin-top: 20px;">
               <a href="#" style="color: #666; text-decoration: none; margin: 0 10px;">Facebook</a>
               <a href="#" style="color: #666; text-decoration: none; margin: 0 10px;">Instagram</a>
@@ -151,7 +155,7 @@ export async function PATCH(
         html: emailContent,
         attachments: [
           {
-            filename: 'logo.png',
+            filename: 'logobg.png',
             content: logoBuffer,
             cid: 'logo'
           },

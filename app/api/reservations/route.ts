@@ -59,10 +59,10 @@ async function sendEmails(data: any) {
       </div>
 
       <div style="text-align: center; color: #666; font-size: 14px;">
-        <p>We're excited to serve you! If you need to make any changes to your reservation, please contact us at ${process.env.RESTAURANT_EMAIL}</p>
+        <p>We're excited to serve you! If you need to make any changes to your reservation, please contact us at salud.calcutta@gmail.com</p>
         <p style="margin-top: 20px;">
-          <strong>Address:</strong> 123 Italian Street<br>
-          <strong>Phone:</strong> (555) 123-4567
+          <strong>Address:</strong> G962+F6R, Lake Range, Kalighat, Kolkata, West Bengal 700045<br>
+          <strong>Phone:</strong> +91 9831175550
         </p>
       </div>
     </div>
@@ -93,10 +93,10 @@ async function sendEmails(data: any) {
         Number of Guests: ${data.guests}
         ${data.specialRequests ? `Special Requests: ${data.specialRequests}` : ''}
         
-        We're excited to serve you! If you need to make any changes to your reservation, please contact us at ${process.env.RESTAURANT_EMAIL}
+        We're excited to serve you! If you need to make any changes to your reservation, please contact us at salud.calcutta@gmail.com
         
-        Address: 123 Italian Street
-        Phone: (555) 123-4567
+        Address: G962+F6R, Lake Range, Kalighat, Kolkata, West Bengal 700045
+        Phone: +91 9831175550
       `
     });
 
