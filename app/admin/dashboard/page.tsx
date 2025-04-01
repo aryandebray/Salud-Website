@@ -140,13 +140,13 @@ export default function DashboardPage() {
     <>
       <div className="bg-[#F7E6D3] shadow">
         <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center">
-            <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div className="flex flex-wrap gap-2">
               {(['ALL', 'PENDING', 'CONFIRMED', 'REJECTED'] as const).map((status) => (
                 <button
                   key={status}
                   onClick={() => setFilter(status)}
-                  className={`px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
+                  className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
                     filter === status
                       ? 'bg-[#C08261] text-white'
                       : 'bg-white text-[#C08261] border border-[#C08261] hover:bg-[#F7E6D3]'
@@ -156,17 +156,17 @@ export default function DashboardPage() {
                 </button>
               ))}
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex flex-wrap items-center gap-3 sm:gap-4">
               <button
                 onClick={fetchReservations}
-                className="px-4 py-2 bg-[#C08261] text-white rounded-md hover:bg-[#B4724F] transition-colors duration-200"
+                className="px-3 py-1.5 sm:px-4 sm:py-2 bg-[#C08261] text-white rounded-md hover:bg-[#B4724F] transition-colors duration-200 text-sm"
                 disabled={loading}
               >
                 {loading ? 'Refreshing...' : 'Refresh'}
               </button>
               <button
                 onClick={() => router.push('/admin/menu')}
-                className="px-4 py-2 bg-[#C08261] text-white rounded-md hover:bg-[#B4724F] transition-colors duration-200"
+                className="px-3 py-1.5 sm:px-4 sm:py-2 bg-[#C08261] text-white rounded-md hover:bg-[#B4724F] transition-colors duration-200 text-sm"
               >
                 Manage Menu
               </button>
@@ -175,14 +175,14 @@ export default function DashboardPage() {
                   await fetch('/api/admin/logout', { method: 'POST' });
                   window.location.href = '/admin/login';
                 }}
-                className="px-4 py-2 bg-[#C08261] text-white rounded-md hover:bg-[#B4724F] transition-colors duration-200"
+                className="px-3 py-1.5 sm:px-4 sm:py-2 bg-[#C08261] text-white rounded-md hover:bg-[#B4724F] transition-colors duration-200 text-sm"
               >
                 Logout
               </button>
               <img 
                 src="/logo.png" 
                 alt="Salud Logo" 
-                className="h-12 w-auto"
+                className="h-8 sm:h-12 w-auto"
               />
             </div>
           </div>
@@ -192,7 +192,7 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+      <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         {error && (
           <div className="mb-4 bg-red-50 border-l-4 border-red-400 p-4">
             <div className="flex">
@@ -208,7 +208,7 @@ export default function DashboardPage() {
           </div>
         )}
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {filteredReservations.length === 0 ? (
             <div className="col-span-full text-center py-12 bg-white rounded-lg shadow">
               <svg className="mx-auto h-12 w-12 text-[#C08261]" fill="none" viewBox="0 0 24 24" stroke="currentColor">

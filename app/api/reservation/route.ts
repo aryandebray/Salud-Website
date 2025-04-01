@@ -169,7 +169,7 @@ export async function POST(request: Request) {
             
             <div class="footer">
               <p>Salud Restaurant<br>
-              123 Italian Street, Foodville, FD 12345</p>
+              G962+F6R, Lake Range, Kalighat, Kolkata, West Bengal 700045</p>
               <p>📞 Phone: +91 9831175550<br>
                  ✉️ Email: salud.calcutta@gmail.com</p>
               <p>This is an automated message. Please do not reply to this email.</p>
@@ -266,7 +266,7 @@ export async function POST(request: Request) {
             </div>
             <div class="footer">
               <p>Salud Restaurant<br>
-              123 Italian Street, Foodville, FD 12345</p>
+              G962+F6R, Lake Range, Kalighat, Kolkata, West Bengal 700045</p>
               <p>📞 Phone: +91 9831175550<br>
                  ✉️ Email: salud.calcutta@gmail.com</p>
               <p>This is an automated message. Please do not reply to this email.</p>

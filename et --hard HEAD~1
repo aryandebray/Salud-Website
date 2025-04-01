@@ -1,0 +1,20 @@
+[33meaf7f7a[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/menu-management[m[33m, [m[1;31morigin/feature/menu-management[m[33m)[m fix: improve email sending for initial reservation confirmation
+[33m29351a3[m fix: update reservation system to handle payment status and QR code display
+[33m97d51ff[m Fix reservation success message in API response
+[33mdd33fe9[m Update email templates with contact information and formatting
+[33me4ef78d[m Fix menu item API routes to match simplified schema
+[33ma693a0b[m Simplify MenuItem model to include only required fields
+[33m33ac68c[m Fix Prisma client configuration and imports
+[33m879b831[m Update email templates with proper image handling and QR code integration
+[33mcc34f38[m[33m ([m[1;31morigin/main[m[33m, [m[1;32mmain[m[33m)[m Fix caching issues and ensure real-time updates
+[33m7184fc9[m Add auto-refresh and improved debugging to admin dashboard
+[33md09ee91[m Add logging for reservation creation and fetching
+[33m1cdda86[m Add Prisma generate to build process
+[33mbcfeabc[m Add API route documentation comment
+[33m8ac14d3[m Add delete functionality for confirmed/rejected reservations
+[33mbae169c[m fix: embed logo in email and fix base URL reference
+[33mee8921f[m Add styled email templates for reservations
+[33m36b75f1[m Fix menu mobile layout with separate mobile and desktop images
+[33m0354e79[m Merge README and resolve conflicts
+[33mbbb5d2b[m Initial commit
+[33m6bc4338[m Initial commit

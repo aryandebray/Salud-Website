@@ -45,7 +45,7 @@ export default function AdminReservations() {
   const handleStatusUpdate = async (id: string, status: 'CONFIRMED' | 'REJECTED') => {
     try {
       setUpdateStatus('Updating...');
-      const response = await fetch(`/api/reservation/${id}`, {
+      const response = await fetch(`/api/admin/reservations/${id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
