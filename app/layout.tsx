@@ -17,8 +17,8 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Salud - Authentic Italian Restaurant",
-  description: "Experience authentic Italian cuisine at Salud. Make your reservations today.",
+  title: "Salud - Supper Club",
+  description: "Experience fine dining at Salud. Make your reservations today.",
 };
 
 export default function RootLayout({
