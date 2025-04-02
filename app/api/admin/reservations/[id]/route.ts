@@ -101,8 +101,8 @@ export async function PATCH(
               <p style="margin: 5px 0;"><strong>Date:</strong> ${new Date(updatedReservation.date).toLocaleDateString()}</p>
               <p style="margin: 5px 0;"><strong>Time:</strong> ${updatedReservation.time}</p>
               <p style="margin: 5px 0;"><strong>Guests:</strong> ${updatedReservation.guests}</p>
-              <p style="margin: 5px 0;"><strong>Price per person:</strong> Rs. 2100</p>
-              <p style="margin: 5px 0;"><strong>Total Amount:</strong> Rs. ${updatedReservation.guests * 2100}</p>
+              <p style="margin: 5px 0;"><strong>Price per person:</strong> Rs. 1900</p>
+              <p style="margin: 5px 0;"><strong>Total Amount:</strong> Rs. ${updatedReservation.guests * 1900}</p>
               ${updatedReservation.specialRequests ? `<p style="margin: 5px 0;"><strong>Special Requests:</strong> ${updatedReservation.specialRequests}</p>` : ''}
             </div>
             ${adminNote ? `<p style="color: #333; font-style: italic;">${adminNote}</p>` : ''}
@@ -131,7 +131,7 @@ export async function PATCH(
 
           <div style="${footerStyle}">
             <p>Salud Restaurant</p>
-            <p>G962+F6R, Lake Range, Kalighat, Kolkata, West Bengal 700045</p>
+            <p>5 Dr. S N Roy Road Kol-29. Beside Menoka Cinema Hall</p>
             <p>📞 Phone: +91 9831175550<br>
                ✉️ Email: salud.calcutta@gmail.com</p>
             <div style="margin-top: 20px;">

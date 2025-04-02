@@ -99,12 +99,12 @@ export default function ReservationForm() {
           viewport={{ once: true }}
           className="max-w-2xl mx-auto text-center text-white mb-12"
         >
-          <h2 className="font-serif text-4xl md:text-5xl mb-4">Make a Reservation</h2>
+          <h2 className="font-serif text-4xl md:text-5xl mb-4">Request for Reservation</h2>
           <p className="text-lg text-gray-200">
             Book your table at Salud and experience authentic Thai cuisine
           </p>
           <p className="text-xl font-semibold text-[#0B4D2C] bg-white/90 rounded-md py-2 px-4 mt-4 inline-block">
-            Price per person: Rs. 2100
+            Price per person: Rs. 1900
           </p>
         </motion.div>
 
@@ -196,7 +196,7 @@ export default function ReservationForm() {
                 ))}
               </select>
               <p className="text-sm font-medium text-[#0B4D2C] mt-2 border border-[#0B4D2C] rounded-md py-1 px-2 inline-block">
-                Price per person: Rs. 2100
+                Price per person: Rs. 1900
               </p>
             </div>
 
@@ -249,13 +249,9 @@ export default function ReservationForm() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className={`w-full mt-8 bg-primary text-white py-3 rounded-md transition-all duration-300 font-medium ${
-              isSubmitting
-                ? 'opacity-70 cursor-not-allowed'
-                : 'hover:bg-primary/90'
-            }`}
+            className="w-full bg-primary text-white py-3 px-6 rounded-md hover:bg-primary/90 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isSubmitting ? 'Submitting...' : 'Reserve Table'}
+            {isSubmitting ? 'Submitting...' : 'Request for Reservation'}
           </button>
         </motion.form>
       </div>

@@ -7,7 +7,7 @@ export default function Contact() {
     {
       icon: MapPinIcon,
       title: 'Address',
-      content: 'G962+F6R, Lake Range, Kalighat, Kolkata, West Bengal 700045'
+      content: '5 Dr. S N Roy Road Kol-29. Beside Menoka Cinema Hall'
     },
     {
       icon: PhoneIcon,
