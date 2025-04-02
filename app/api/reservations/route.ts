@@ -61,7 +61,7 @@ async function sendEmails(data: any) {
       <div style="text-align: center; color: #666; font-size: 14px;">
         <p>We're excited to serve you! If you need to make any changes to your reservation, please contact us at salud.calcutta@gmail.com</p>
         <p style="margin-top: 20px;">
-          <strong>Address:</strong> G962+F6R, Lake Range, Kalighat, Kolkata, West Bengal 700045<br>
+          <strong>Address:</strong> 5 Dr. S N Roy Road Kol-29. Beside Menoka Cinema Hall<br>
           <strong>Phone:</strong> +91 9831175550
         </p>
       </div>
@@ -95,7 +95,7 @@ async function sendEmails(data: any) {
         
         We're excited to serve you! If you need to make any changes to your reservation, please contact us at salud.calcutta@gmail.com
         
-        Address: G962+F6R, Lake Range, Kalighat, Kolkata, West Bengal 700045
+        Address: 5 Dr. S N Roy Road Kol-29. Beside Menoka Cinema Hall
         Phone: +91 9831175550
       `
     });
