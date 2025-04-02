@@ -8,32 +8,32 @@ export default function Gallery() {
     {
       src: '/gallery/pasta.jpg',
       alt: 'Fresh Italian Pasta',
-      title: 'Handmade'
+      title: ''
     },
     {
       src: '/gallery/pizza.jpg',
       alt: 'Wood-fired Pizza',
-      title: 'Authentic'
+      title: ''
     },
     {
       src: '/gallery/wine.jpg',
       alt: 'Wine Selection',
-      title: 'Fine'
+      title: ''
     },
     {
       src: '/gallery/dessert.jpg',
       alt: 'Italian Desserts',
-      title: 'Sweet'
+      title: ''
     },
     {
       src: '/gallery/interior.jpg',
       alt: 'Restaurant Interior',
-      title: 'Elegant'
+      title: ''
     },
     {
       src: '/gallery/chef.jpg',
       alt: 'Our Chef',
-      title: 'Expert Chef'
+      title: ''
     }
   ];
 
